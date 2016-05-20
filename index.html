@@ -117,7 +117,7 @@
       var loginError = MP.api.segment('Logged IN Error', _.extend(params, {where: '(user["$browser"] == "Chrome" or user["$browser"] == "Firefox" or user["$browser"] == "Internet Explorer" or user["$browser"] == "Mozilla" or user["$browser"] == "Safari" or user["$browser"] == "Microsoft Edge" or user["$browser"] == "Opera")'}) )
       $.when(logins, loginError).done(function(loginData, loginErrorData){
         debugger
-        $('#logins').highchars({
+        $('#logins').highcharts({
            title: {
                 text: 'Logins'
             },
