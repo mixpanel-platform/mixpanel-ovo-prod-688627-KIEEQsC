@@ -90,21 +90,9 @@
     <div class="mixpanel-platform-section">
 
       <!--<div style="clear: both;"></div>-->
-      <div class="actives clearfix" style="margin: auto; max-width: 98%;">
+      <div class="charts clearfix">
         <div id="logins" align="right"></div>
-        <div style="float: right;  padding-top: 7px; padding-bottom: 7px; padding-left: 3px; max-width: 48%;" id="loginError" align="left"></div>
-      </div>
-      <div class="newUsers clearfix" style="margin: auto; max-width: 98%;">
-        <div style="float: left;  padding-top: 7px; padding-bottom: 7px; padding-right: 3px; max-width: 48%;" id="weeklyNewUsers" align="right"></div>
-        <div style="float: right;  padding-top: 7px; padding-bottom: 7px; padding-left: 3px; max-width: 48%;" id="monthlyNewUsers" align="left"></div>
-      </div>
-      <div class="newUsersOverActiveUsers clearfix" style="margin: auto; max-width: 98%;">
-        <div style="float: left;  padding-top: 7px; padding-bottom: 7px; padding-right: 3px; max-width: 48%;"  id="weeklyActiveAndNewPercentage" align="right"></div>
-        <div style="float: right;  padding-top: 7px; padding-bottom: 7px; padding-left: 3px; max-width: 48%;" id="MonthlyActiveAndNewPercentage" align="left"></div>
-      </div>
-      <div class="DAUsMAUs clearfix" style="margin: auto; max-width: 98%;">
-        <div style="float: left;  padding-top: 7px; padding-bottom: 20px; padding-right: 3px; max-width: 48%;" id="dau-over-mau-graph" align="right"></div>
-        <div style="float: right;  padding-top: 7px; padding-bottom: 20px; padding-left: 3px; max-width: 48%;" id="dau-over-mau-graph-2" align="left"></div>
+        <div></div>
       </div>
       <div id="graph" style="padding-top: 7px; padding-bottom: 7px; max-height: 700px;"></div>
     </div>
@@ -113,12 +101,12 @@
         from: moment().subtract(30, 'days'),
         to: moment(),
       } 
+      
       var logins = MP.api.segment('Logged In', params)
       var loginError = MP.api.segment('Logged IN Error', _.extend(params, {where: '(user["$browser"] == "Chrome" or user["$browser"] == "Firefox" or user["$browser"] == "Internet Explorer" or user["$browser"] == "Mozilla" or user["$browser"] == "Safari" or user["$browser"] == "Microsoft Edge" or user["$browser"] == "Opera")'}) )
       $.when(logins, loginError).done(function(loginData, loginErrorData){
-        var lineChart = $('#logins').MPChart({chartType: 'line'});                          
-        lineChart.MPChart('setData', loginData);
-        
+       
+        $('<div id="logins"></div>').appendTo('charts').MPChart({chartType: 'line', data: loginData});                  
         debugger
       
       })
