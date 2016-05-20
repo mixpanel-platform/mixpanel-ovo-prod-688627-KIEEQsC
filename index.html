@@ -71,7 +71,7 @@
       */
       var uniqueActionsPerfParams =  _.extend(_.clone(params), {})
       var uniqueActiondsPerf = MP.api.segment('PAYM - Submitted Meter Reading', uniqueActionsPerfParams )
-      $.when(logins, loginError, homeScreenViews, totalVisitsChannel,  avgVisitsChannel, uniqueUsersPageLevel, uniqueActionsPerf).done(function(loginData, loginErrorData, homeScreenViewsData, totalVisitsChannelData, avgVisitsChannelData uniqueUsersPageLevelData, uniqueActionsPerfData){
+      $.when(logins, loginError, homeScreenViews, totalVisitsChannel,  avgVisitsChannel, uniqueUsersPageLevel, uniqueActionsPerf).done(function(loginData, loginErrorData, homeScreenViewsData, totalVisitsChannelData, avgVisitsChannelData, uniqueUsersPageLevelData, uniqueActionsPerfData){
        
         $('<div id="logins"></div>').appendTo('.charts').MPChart({chartType: 'line', data: loginData});
         $('<div id="loginErrors"></div>').appendTo('.charts').MPChart({chartType: 'line', data: loginErrorData});         
