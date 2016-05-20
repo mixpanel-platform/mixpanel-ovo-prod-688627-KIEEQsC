@@ -8,38 +8,81 @@
   </head>
   <body class="mixpanel-platform-body" style="height: auto">
     <div class="mixpanel-platform-section">
-
-      <!--<div style="clear: both;"></div>-->
       <div class="charts clearfix">
-        <div id="logins" align="right"></div>
-        <div></div>
       </div>
-      <div id="graph" style="padding-top: 7px; padding-bottom: 7px; max-height: 700px;"></div>
     </div>
     <script>
-    
-    // add these to a list of promises?
     
       MP.api.MAX_SIMULTANEOUS_QUERIES = 10
       var params = {
         from: moment().subtract(30, 'days'),
         to: moment(),
       } 
+      /* Logins possibly make them unique
+      * URL for Reference:
+      *
+      */
       
-      var logins = MP.api.segment('Logged In', params)
+      var loginsParams = _.extend(_.clone(params), {type: 'unique'})
+      var logins = MP.api.segment('Logged In', loginsParams)
       
-      var loginErrorParams = _.extend(_.clone(params), {where: '(user["$browser"] == "Chrome" or user["$browser"] == "Firefox" or user["$browser"] == "Internet Explorer" or user["$browser"] == "Mozilla" or user["$browser"] == "Safari" or user["$browser"] == "Microsoft Edge" or user["$browser"] == "Opera")'})
+      /* Failed Logins
+      * URL for Reference:
+      *
+      */
+      var loginErrorParams = _.extend(_.clone(params), {
+        where: '(user["$browser"] == "Chrome" or user["$browser"] == "Firefox" or user["$browser"] == "Internet Explorer" or user["$browser"] == "Mozilla" or user["$browser"] == "Safari" or user["$browser"] == "Microsoft Edge" or user["$browser"] == "Opera")'
+      })
+      var loginError = MP.api.segment('Logged In Error', loginErrorParams)
       
-      var loginError = MP.api.segment('Logged In Error', loginErrorParams )
-      
+      /* Summary access
+      * URL for Reference:
+      *
+      */
       var homeScreenViewsParams =  _.extend(_.clone(params), {})
-      
       var homeScreenViews = MP.api.segment('PAYM - Viewed Home Screen', homeScreenViewsParams)
+      
+      /* Total Visits Channel
+      * URL for Reference:
+      *
+      */
+      var totalVisitsChannelParams =  _.extend(_.clone(params), {
+        where: '(properties["$browser"] == "Chrome" or properties["$browser"] == "Firefox" or properties["$browser"] == "Internet Explorer" or properties["$browser"] == "Microsoft Edge" or properties["$browser"] == "Mozilla" or properties["$browser"] == "Opera" or properties["$browser"] == "Safari")'
+      })
+      var totalVisitsChannel = MP.api.segment('PAYM - Viewed Home Screen', totalVisitsChannelParams)
+      
+      /* Average Visits Channel
+      * URL for Reference:
+      *
+      */
+      var avgVisitsChannelParams =  _.extend(_.clone(params), {type: 'average' })
+      var avgVisitsChannel = MP.api.segment('PAYM - Viewed Home Screen', avgVisitsChannelParams)
+      
+      
+      /* Unique users Page Level
+      * URL for ref:
+      * https://mixpanel.com/report/688627/segmentation/#action:segment,arb_event:'PAYM%20-%20Viewed%20Home%20Screen',bool_op:and,chart_type:pie,from_date:-7,ms_checked:('PAYM%20-%20Viewed%20Home%20Screen':!t),ms_values:!('PAYM%20-%20Viewed%20Home%20Screen'),to_date:-1,type:unique,unit:day
+      */
+      var uniqueUsersPageLevelParams =  _.extend(_.clone(params), {type: 'Unique'})
+      var uniqueUsersPageLevel = MP.api.segment('PAYM - Viewed Home Screen', uniqueUsersPageLevelParams)
       debugger
-      $.when(logins, loginError).done(function(loginData, loginErrorData){
+      
+      /* Unique Actions Performed
+      * URL:
+      * https://mixpanel.com/report/688627/segmentation/#action:segment,arb_event:'PAYM%20-%20Submitted%20Meter%20Reading',bool_op:and,chart_analysis_type:linear,chart_type:pie,from_date:-7,ms_checked:('PAYM%20-%20Submitted%20Meter%20Reading':!t),ms_values:!('PAYM%20-%20Submitted%20Meter%20Reading'),to_date:-1,type:general,unit:day
+      */
+      var uniqueActionsPerfParams =  _.extend(_.clone(params), {})
+      var uniqueActiondsPerf = MP.api.segment('PAYM - Submitted Meter Reading', uniqueActionsPerfParams )
+      $.when(logins, loginError, homeScreenViews, totalVisitsChannel, uniqueUsersPageLevel, uniqueActionsPerf).done(function(loginData, loginErrorData, homeScreenViewsData, totalVisitsChannelData, uniqueUsersPageLevelData, uniqueActionsPerfData){
        
         $('<div id="logins"></div>').appendTo('.charts').MPChart({chartType: 'line', data: loginData});
-        $('<div id="loginErrors"></div>').appendTo('.charts').MPChart({chartType: 'line', data: loginErrorData});                  
+        $('<div id="loginErrors"></div>').appendTo('.charts').MPChart({chartType: 'line', data: loginErrorData});         
+        $('<div id="homeScreenViews"></div>').appendTo('.charts').MPChart({chartType: 'line', data: homeScreenViewsData});
+        $('<div id="totalVisitsChannel"></div>').appendTo('.charts').MPChart({chartType: 'line', data: totalVisitsChannelData});
+        $('<div id="avgVisitsChannel"></div>').appendTo('.charts').MPChart({chartType: 'line', data: avgVisitsChannelData});
+        $('<div id="uniqueUsersPageLevel"></div>').appendTo('.charts').MPChart({chartType: 'line', data: uniqueUsersPageLevelData});
+        $('<div id="uniqueActionsPerf"></div>').appendTo('.charts').MPChart({chartType: 'line', data: uniqueActionsPerfData});
+
         debugger
       
       })
