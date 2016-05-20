@@ -24,7 +24,7 @@
       
       var logins = MP.api.segment('Logged In', params)
       
-      var loginError = MP.api.segment('Logged In Error', _.extend(params, {where: '(user["$browser"] == "Chrome" or user["$browser"] == "Firefox" or user["$browser"] == "Internet Explorer" or user["$browser"] == "Mozilla" or user["$browser"] == "Safari" or user["$browser"] == "Microsoft Edge" or user["$browser"] == "Opera")'}))
+      var loginError = MP.api.segment('Logged In Error', _.extend(_.clone(params), {where: '(user["$browser"] == "Chrome" or user["$browser"] == "Firefox" or user["$browser"] == "Internet Explorer" or user["$browser"] == "Mozilla" or user["$browser"] == "Safari" or user["$browser"] == "Microsoft Edge" or user["$browser"] == "Opera")'}))
       debugger
       $.when(logins, loginError).done(function(loginData, loginErrorData){
        
