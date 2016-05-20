@@ -62,7 +62,7 @@
       * URL for ref:
       * https://mixpanel.com/report/688627/segmentation/#action:segment,arb_event:'PAYM%20-%20Viewed%20Home%20Screen',bool_op:and,chart_type:pie,from_date:-7,ms_checked:('PAYM%20-%20Viewed%20Home%20Screen':!t),ms_values:!('PAYM%20-%20Viewed%20Home%20Screen'),to_date:-1,type:unique,unit:day
       */
-      var uniqueUsersPageLevelParams =  _.extend(_.clone(params), {type: 'Unique'})
+      var uniqueUsersPageLevelParams =  _.extend(_.clone(params), {type: 'unique'})
       var uniqueUsersPageLevel = MP.api.segment('PAYM - Viewed Home Screen', uniqueUsersPageLevelParams)
       
       /* Unique Actions Performed
@@ -70,7 +70,11 @@
       * https://mixpanel.com/report/688627/segmentation/#action:segment,arb_event:'PAYM%20-%20Submitted%20Meter%20Reading',bool_op:and,chart_analysis_type:linear,chart_type:pie,from_date:-7,ms_checked:('PAYM%20-%20Submitted%20Meter%20Reading':!t),ms_values:!('PAYM%20-%20Submitted%20Meter%20Reading'),to_date:-1,type:general,unit:day
       */
       var uniqueActionsPerfParams =  _.extend(_.clone(params), {})
-      var uniqueActiondsPerf = MP.api.segment('PAYM - Submitted Meter Reading', uniqueActionsPerfParams )
+      var uniqueActionsPerf = MP.api.segment('PAYM - Submitted Meter Reading', uniqueActionsPerfParams )
+      
+      /* 
+      * Wait till all the above queries are completed before drawing the graphs
+      */
       $.when(logins, loginError, homeScreenViews, totalVisitsChannel,  avgVisitsChannel, uniqueUsersPageLevel, uniqueActionsPerf).done(function(loginData, loginErrorData, homeScreenViewsData, totalVisitsChannelData, avgVisitsChannelData, uniqueUsersPageLevelData, uniqueActionsPerfData){
        
         $('<div id="logins"></div>').appendTo('.charts').MPChart({chartType: 'line', data: loginData});
