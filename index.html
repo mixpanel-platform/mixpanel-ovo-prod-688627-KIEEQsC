@@ -76,13 +76,21 @@
       * Wait till all the above queries are completed before drawing the graphs
       */
       $.when(logins, loginError, homeScreenViews, totalVisitsChannel,  avgVisitsChannel, uniqueUsersPageLevel, uniqueActionsPerf).done(function(loginData, loginErrorData, homeScreenViewsData, totalVisitsChannelData, avgVisitsChannelData, uniqueUsersPageLevelData, uniqueActionsPerfData){
-       
+        $('<h1>Login Data</h1>').appendTo('.charts')
         $('<div id="logins"></div>').appendTo('.charts').MPChart({chartType: 'line', data: loginData});
-        $('<div id="loginErrors"></div>').appendTo('.charts').MPChart({chartType: 'line', data: loginErrorData});         
+        
+        $('<h1>Login Error Channels - Desktop</h1>').appendTo('.charts')
+        $('<div id="loginErrors"></div>').appendTo('.charts').MPChart({chartType: 'line', data: loginErrorData});       
+        
+        $('<h1>Home Screen Views</h1>').appendTo('.charts')
         $('<div id="homeScreenViews"></div>').appendTo('.charts').MPChart({chartType: 'line', data: homeScreenViewsData});
+        $('<h1>Total Visits Channel - Desktop</h1>').appendTo('.charts')
         $('<div id="totalVisitsChannel"></div>').appendTo('.charts').MPChart({chartType: 'line', data: totalVisitsChannelData});
+        $('<h1>Average Visits Channel - All Channels</h1>').appendTo('.charts')
         $('<div id="avgVisitsChannel"></div>').appendTo('.charts').MPChart({chartType: 'line', data: avgVisitsChannelData});
+        $('<h1>Unique Users Page View</h1>').appendTo('.charts')
         $('<div id="uniqueUsersPageLevel"></div>').appendTo('.charts').MPChart({chartType: 'line', data: uniqueUsersPageLevelData});
+        $('<h1>Unique Actions - Submitted Meter Reading</h1>').appendTo('.charts')
         $('<div id="uniqueActionsPerf"></div>').appendTo('.charts').MPChart({chartType: 'line', data: uniqueActionsPerfData});
 
         debugger
