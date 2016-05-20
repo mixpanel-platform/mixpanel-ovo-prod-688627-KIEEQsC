@@ -17,6 +17,10 @@
       <div id="graph" style="padding-top: 7px; padding-bottom: 7px; max-height: 700px;"></div>
     </div>
     <script>
+    
+    // add these to a list of promises?
+    
+      MP.api.MAX_SIMULTANEOUS_QUERIES = 10
       var params = {
         from: moment().subtract(30, 'days'),
         to: moment(),
@@ -24,7 +28,13 @@
       
       var logins = MP.api.segment('Logged In', params)
       
-      var loginError = MP.api.segment('Logged In Error', _.extend(_.clone(params), {where: '(user["$browser"] == "Chrome" or user["$browser"] == "Firefox" or user["$browser"] == "Internet Explorer" or user["$browser"] == "Mozilla" or user["$browser"] == "Safari" or user["$browser"] == "Microsoft Edge" or user["$browser"] == "Opera")'}))
+      var loginErrorParams = _.extend(_.clone(params), {where: '(user["$browser"] == "Chrome" or user["$browser"] == "Firefox" or user["$browser"] == "Internet Explorer" or user["$browser"] == "Mozilla" or user["$browser"] == "Safari" or user["$browser"] == "Microsoft Edge" or user["$browser"] == "Opera")'})
+      
+      var loginError = MP.api.segment('Logged In Error', loginErrorParams )
+      
+      var homeScreenViewsParams =  _.extend(_.clone(params), {})
+      
+      var homeScreenViews = MP.api.segment('PAYM - Viewed Home Screen', homeScreenViewsParams)
       debugger
       $.when(logins, loginError).done(function(loginData, loginErrorData){
        
