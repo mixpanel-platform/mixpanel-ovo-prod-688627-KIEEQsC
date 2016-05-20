@@ -1,15 +1,125 @@
 <!DOCTYPE html>
-<html>
+<html style="height: auto;">
   <head>
     <meta charset="utf-8">
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
     <link rel="stylesheet" type="text/css" href="https://cdn.mxpnl.com/libs/mixpanel-platform/css/reset.css">
     <link rel="stylesheet" type="text/css" href="https://cdn.mxpnl.com/libs/mixpanel-platform/build/mixpanel-platform.v0.latest.min.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
     <script src="https://cdn.mxpnl.com/libs/mixpanel-platform/build/mixpanel-platform.v0.latest.min.js"></script>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+    <style>
+      .content-wrapper > h3, .content-wrapper > .content-heading {
+          font-size: 24px;
+          line-height: 1.1;
+          color: #929292;
+          margin: -15px;
+          margin-bottom: 20px;
+          padding: 15px;
+          font-weight: normal;
+          background-color: #fafbfc;
+          border-bottom: 1px solid #cfdbe2;
+      }
+      .row-table {
+          display: table;
+          table-layout: fixed;
+          height: 100%;
+          width: 100%;
+          margin: 0;
+      }
+      .widget.panel, .widget .panel {
+          overflow: hidden;
+      }
+      
+      .widget {
+          margin-bottom: 20px;
+          border: 0;
+      }
+      
+      .row-table > [class*="col-"] {
+          display: table-cell;
+          float: none;
+          table-layout: fixed;
+          vertical-align: middle;
+      }
+      
+      .pv-lg {
+          padding-top: 15px !important;
+          padding-bottom: 15px !important;
+      }
+      
+      .bg-primary {
+        background-color: #5d9cec;
+        color: #ffffff !important;
+      }
+      
+      
+      .bg-primary-dark {
+        background-color: #2f80e7;
+        color: #ffffff !important;
+      }
+      
+      .bg-purple {
+          background-color: #7266ba;
+          color: #ffffff !important;
+      }
+      
+      .bg-purple-dark {
+          background-color: #564aa3;
+          color: #ffffff !important;
+      }
+      
+      .bg-green {
+          background-color: #37bc9b;
+          color: #ffffff !important;
+      }
+      
+      .bg-green-dark {
+          background-color: #2b957a;
+          color: #ffffff !important;
+      }
+      
+    </style>
+
+    <script src="//cdn.datatables.net/1.10.9/js/jquery.dataTables.min.js"></script>
+    <script src="//code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
+    <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/simple-line-icons/2.2.4/css/simple-line-icons.min.css">
+    <link rel="stylesheet" type="text/css" href="//cdn.datatables.net/1.10.9/css/jquery.dataTables.min.css">
   </head>
-  <body class="mixpanel-platform-body">
-    <h1>Hello, World!</h1>
+  <body class="mixpanel-platform-body" style="height: auto">
+    <div class="mixpanel-platform-section">
+
+      <!--<div style="clear: both;"></div>-->
+      <div class="actives clearfix" style="margin: auto; max-width: 98%;">
+        <div style="float: left;  padding-top: 7px; padding-bottom: 7px; padding-right: 3px; max-width: 48%;" id="logins" align="right"></div>
+        <div style="float: right;  padding-top: 7px; padding-bottom: 7px; padding-left: 3px; max-width: 48%;" id="loginError" align="left"></div>
+      </div>
+      <div class="newUsers clearfix" style="margin: auto; max-width: 98%;">
+        <div style="float: left;  padding-top: 7px; padding-bottom: 7px; padding-right: 3px; max-width: 48%;" id="weeklyNewUsers" align="right"></div>
+        <div style="float: right;  padding-top: 7px; padding-bottom: 7px; padding-left: 3px; max-width: 48%;" id="monthlyNewUsers" align="left"></div>
+      </div>
+      <div class="newUsersOverActiveUsers clearfix" style="margin: auto; max-width: 98%;">
+        <div style="float: left;  padding-top: 7px; padding-bottom: 7px; padding-right: 3px; max-width: 48%;"  id="weeklyActiveAndNewPercentage" align="right"></div>
+        <div style="float: right;  padding-top: 7px; padding-bottom: 7px; padding-left: 3px; max-width: 48%;" id="MonthlyActiveAndNewPercentage" align="left"></div>
+      </div>
+      <div class="DAUsMAUs clearfix" style="margin: auto; max-width: 98%;">
+        <div style="float: left;  padding-top: 7px; padding-bottom: 20px; padding-right: 3px; max-width: 48%;" id="dau-over-mau-graph" align="right"></div>
+        <div style="float: right;  padding-top: 7px; padding-bottom: 20px; padding-left: 3px; max-width: 48%;" id="dau-over-mau-graph-2" align="left"></div>
+      </div>
+      <div id="graph" style="padding-top: 7px; padding-bottom: 7px; max-height: 700px;"></div>
+    </div>
     <script>
-      // Run queries and display results here
+      var params = {
+        from: moment().subtract(30, 'days'),
+        to: moment(),
+      } 
+      var logins = MP.api.segment('Logged In', params)
+      var loginError = MP.api.segment('Logged IN Error', _.extend(params, {where: '(user["$browser"] == "Chrome" or user["$browser"] == "Firefox" or user["$browser"] == "Internet Explorer" or user["$browser"] == "Mozilla" or user["$browser"] == "Safari" or user["$browser"] == "Microsoft Edge" or user["$browser"] == "Opera")'}) )
+      debugger
     </script>
+    
+
+
   </body>
 </html>
+
